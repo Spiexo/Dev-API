@@ -5,7 +5,7 @@ import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 
 dotenv.config();
-
+const version = "api/v1/";
 const app = express();
 app.use(cors());
 app.use(express.json());

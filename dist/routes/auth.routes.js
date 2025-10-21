@@ -5,4 +5,6 @@ const auth_controllers_1 = require("../controllers/auth.controllers");
 const router = (0, express_1.Router)();
 router.post("/register", auth_controllers_1.register);
 router.post("/login", auth_controllers_1.login);
+router.post("/logout", auth_controllers_1.logout);
+router.post("/refresh", auth_controllers_1.refreshToken);
 exports.default = router;
