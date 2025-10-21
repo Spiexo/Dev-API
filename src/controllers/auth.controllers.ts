@@ -6,13 +6,12 @@ import dbPromise from "../config/config";
 export const register = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
+    const db = await dbPromise;
+    
     if (!username || !email || !password) {
       return res.status(400).json({ error: "Champs manquants" });
     }
 
-    const db = await dbPromise;
-
-    // Vérifie si l'email est déjà utilisé
     const existingUser = await db.get("SELECT id FROM users WHERE email = ?", [email]);
     if (existingUser) {
       return res.status(400).json({ error: "Cet email est déjà utilisé." });
@@ -20,7 +19,6 @@ export const register = async (req: Request, res: Response) => {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    // Insertion
     const result = await db.run(
       "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
       [username, email, hashed]
@@ -30,7 +28,6 @@ export const register = async (req: Request, res: Response) => {
       return res.status(500).json({ error: "Erreur lors de la création du compte" });
     }
 
-    // Récupération de l’utilisateur inséré
     const user = await db.get(
       "SELECT id, username, email FROM users WHERE id = ?",
       [result.lastID]
@@ -40,7 +37,6 @@ export const register = async (req: Request, res: Response) => {
       return res.status(500).json({ error: "Utilisateur non retrouvé après insertion" });
     }
 
-    // Création du token JWT
     const token = jwt.sign(
       { id: user.id, mail: user.email },
       process.env.JWT_SECRET!,
@@ -67,6 +63,10 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const db = await dbPromise;
+    
+    if (!email || !password) {
+      return res.status(400).json({ error: "Champs manquants" });
+    }
 
     const user = await db.get("SELECT * FROM users WHERE email = ?", [email]);
     if (!user)

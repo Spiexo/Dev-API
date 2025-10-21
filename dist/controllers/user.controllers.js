@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editProfil = exports.getUserProfil = exports.getMyProfil = void 0;
+exports.deleteUser = exports.editProfil = exports.getUserProfil = exports.getMyProfil = void 0;
 const config_1 = __importDefault(require("../config/config"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const getMyProfil = async (req, res) => {
     try {
         const { id } = req.user;
@@ -59,16 +60,29 @@ exports.getUserProfil = getUserProfil;
 const editProfil = async (req, res) => {
     try {
         const { id } = req.user;
+        if (!id) {
+            return res.status(401).json({ error: "Utilisateur non authentifié" });
+        }
         const db = await config_1.default;
-        const { username, first_name, last_name, bio, avatar_url } = req.body;
-        await db.run(`UPDATE users 
-       SET username = ?, first_name = ?, last_name = ?, bio = ?, avatar_url = ?
-       WHERE id = ?`, [username, first_name, last_name, bio, avatar_url, id]);
+        const allowedFields = ["username", "first_name", "last_name", "bio", "avatar_url"];
+        const updates = Object.entries(req.body)
+            .filter(([key, value]) => allowedFields.includes(key) && value !== undefined);
+        if (updates.length === 0) {
+            return res.status(400).json({ error: "Aucune donnée à mettre à jour" });
+        }
+        const fields = updates.map(([key]) => `${key} = ?`).join(", ");
+        const values = updates.map(([_, value]) => value);
+        values.push(id);
+        const result = await db.run(`UPDATE users SET ${fields} WHERE id = ?`, values);
+        if (result.changes === 0) {
+            return res.status(404).json({ error: "Utilisateur introuvable ou inchangé" });
+        }
         const updatedUser = await db.get("SELECT * FROM users WHERE id = ?", [id]);
         if (!updatedUser) {
             return res.status(404).json({ error: "Utilisateur introuvable après mise à jour" });
         }
         res.status(200).json({
+            message: "Profil mis à jour avec succès",
             user: {
                 id: updatedUser.id,
                 username: updatedUser.username,
@@ -81,8 +95,41 @@ const editProfil = async (req, res) => {
         });
     }
     catch (error) {
-        console.error(error);
+        console.error("Erreur dans editProfil:", error);
         res.status(500).json({ error: "Erreur serveur" });
     }
 };
 exports.editProfil = editProfil;
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.user;
+        const { passwordTest } = req.body;
+        if (!passwordTest) {
+            return res.status(400).json({ message: "Mot de passe requis." });
+        }
+        const db = await config_1.default;
+        const user = await db.get("SELECT username, password FROM users WHERE id=?", [id]);
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur introuvable." });
+        }
+        const { username, password } = user;
+        const match = await bcrypt_1.default.compare(passwordTest, password);
+        if (!match) {
+            return res.status(401).json({ message: "Mot de passe incorrect." });
+        }
+        const result = await db.run("DELETE FROM users WHERE id=?", [id]);
+        if (result && result.changes && result.changes > 0) {
+            return res.status(200).json({
+                message: `L'utilisateur ${username} a été supprimé avec succès.`,
+            });
+        }
+        else {
+            return res.status(404).json({ message: "Échec de la suppression." });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Erreur interne du serveur." });
+    }
+};
+exports.deleteUser = deleteUser;

@@ -6,4 +6,6 @@ const user_controllers_1 = require("../controllers/user.controllers");
 const router = (0, express_1.Router)();
 router.get('/profil', auth_middlewares_1.authenticateToken, user_controllers_1.getMyProfil);
 router.get('/profil/:id', auth_middlewares_1.authenticateToken, user_controllers_1.getUserProfil);
+router.put('/', auth_middlewares_1.authenticateToken, user_controllers_1.editProfil);
+router.delete('/', auth_middlewares_1.authenticateToken, user_controllers_1.deleteUser);
 exports.default = router;
