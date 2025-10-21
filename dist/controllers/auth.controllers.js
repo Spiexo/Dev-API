@@ -37,7 +37,7 @@ const register = async (req, res) => {
         res.status(201).json({
             message: "Inscription réussie",
             accessToken,
-            refreshToken, // ou n'envoyer que l'accessToken si tu utilises cookie pour le refresh
+            refreshToken,
             user,
         });
     }
