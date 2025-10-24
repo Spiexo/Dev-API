@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const amdin_controllers_1 = require("../controllers/amdin.controllers");
+const auth_middlewares_1 = require("../middlewares/auth.middlewares");
+const role_middlewares_1 = require("../middlewares/role.middlewares");
+const admin_controllers_1 = require("../controllers/admin.controllers");
 const router = (0, express_1.Router)();
-router.post("/ban/:id", amdin_controllers_1.banUser);
-router.post("/unban/:id", amdin_controllers_1.unbanUser);
+router.post("/ban/:id", auth_middlewares_1.authenticateToken, (0, role_middlewares_1.requireRole)("admin"), admin_controllers_1.banUser);
+router.post("/unban/:id", auth_middlewares_1.authenticateToken, (0, role_middlewares_1.requireRole)("admin"), admin_controllers_1.unbanUser);
 exports.default = router;

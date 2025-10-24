@@ -73,7 +73,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, is_banned } = req.body;
     const db = await dbPromise;
 
     if (!email || !password) {
@@ -86,6 +86,10 @@ export const login = async (req: Request, res: Response) => {
 
     const match = await bcrypt.compare(password, user.password);
     if (!match)
+      return res.status(401).json({ error: "Identifiants incorrects" });
+
+    const ban = await db.get("SELECT * FROM users WHERE is_banned = ?", [is_banned]);
+    if (!ban)
       return res.status(401).json({ error: "Identifiants incorrects" });
 
     const accessToken = jwt.sign(
