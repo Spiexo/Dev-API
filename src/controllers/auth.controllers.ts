@@ -112,7 +112,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.status(200).json({
       accessToken,
-      refreshToken,
+      refreshToken, // mettre refresh token en cookie httpOnly côté client idéalement
       info: { is_premium: user.is_premium, role: user.role },
     });
   } catch (error) {

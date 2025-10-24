@@ -52,7 +52,7 @@ const register = async (req, res) => {
 exports.register = register;
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, is_banned } = req.body;
         const db = await config_1.default;
         if (!email || !password) {
             return res.status(400).json({ error: "Champs manquants" });
@@ -63,13 +63,16 @@ const login = async (req, res) => {
         const match = await bcrypt_1.default.compare(password, user.password);
         if (!match)
             return res.status(401).json({ error: "Identifiants incorrects" });
+        const ban = await db.get("SELECT * FROM users WHERE is_banned = ?", [is_banned]);
+        if (!ban)
+            return res.status(401).json({ error: "Identifiants incorrects" });
         const accessToken = jsonwebtoken_1.default.sign({ id: user.id, mail: user.email }, process.env.JWT_SECRET, { expiresIn: "15m" });
         const refreshToken = jsonwebtoken_1.default.sign({ id: user.id, mail: user.email }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
         const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 j
         await db.run("INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, ?)", [user.id, refreshToken, expiresAt.toISOString()]);
         res.status(200).json({
             accessToken,
-            refreshToken,
+            refreshToken, // mettre refresh token en cookie httpOnly côté client idéalement
             info: { is_premium: user.is_premium, role: user.role },
         });
     }
