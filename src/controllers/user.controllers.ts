@@ -3,6 +3,7 @@ import dbPromise from "../config/config";
 import { User } from "../models/user.models";
 import bcrypt from "bcrypt";
 
+// Récupérer le profil de l'utilisateur connecté
 export const getMyProfil = async (req: any, res: Response) => {
   try {
     const { id } = req.user;
@@ -31,6 +32,7 @@ export const getMyProfil = async (req: any, res: Response) => {
   }
 };
 
+// Récupérer le profil d'un utilisateur par son ID
 export const getUserProfil = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -58,6 +60,7 @@ export const getUserProfil = async (req: Request, res: Response) => {
   }
 };
 
+// Éditer le profil de l'utilisateur connecté
 export const editProfil = async (req: any, res: Response) => {
   try {
     const { id } = req.user;
@@ -111,6 +114,7 @@ export const editProfil = async (req: any, res: Response) => {
   }
 };
 
+// Supprimer le compte de l'utilisateur connecté
 export const deleteUser = async (req: any, res: Response) => {
   try {
     const { id } = req.user;

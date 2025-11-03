@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.editProfil = exports.getUserProfil = exports.getMyProfil = void 0;
 const config_1 = __importDefault(require("../config/config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+// Récupérer le profil de l'utilisateur connecté
 const getMyProfil = async (req, res) => {
     try {
         const { id } = req.user;
@@ -32,6 +33,7 @@ const getMyProfil = async (req, res) => {
     }
 };
 exports.getMyProfil = getMyProfil;
+// Récupérer le profil d'un utilisateur par son ID
 const getUserProfil = async (req, res) => {
     try {
         const { id } = req.params;
@@ -57,6 +59,7 @@ const getUserProfil = async (req, res) => {
     }
 };
 exports.getUserProfil = getUserProfil;
+// Éditer le profil de l'utilisateur connecté
 const editProfil = async (req, res) => {
     try {
         const { id } = req.user;
@@ -100,6 +103,7 @@ const editProfil = async (req, res) => {
     }
 };
 exports.editProfil = editProfil;
+// Supprimer le compte de l'utilisateur connecté
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.user;

@@ -22,10 +22,9 @@ yarn
 ```
 
 Configuration
-- Créer un fichier `.env` à la racine en se basant sur `.env.example` (s'il existe). Exemple minimal :
+- Créer un fichier `.env` à la racine en se basant sur `.env.example` . Exemple minimal :
 ```
 PORT=3000
-DATABASE_URL=postgres://user:password@localhost:5432/filrouge
 JWT_SECRET=changeme
 NODE_ENV=development
 ```
@@ -39,29 +38,8 @@ Node.js (développement)
 npm run dev
 
 # ou
-npm start
-```
-
-Python (Flask/FastAPI) — exemple
-```bash
-# créer et activer un venv
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# Unix
-source .venv/bin/activate
-
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-Docker (optionnel)
-```bash
-# construire
-docker build -t fil-rouge-api .
-
-# lancer (avec variables d'environnement)
-docker run --env-file .env -p 3000:3000 fil-rouge-api
+npx tsc
+npm run start
 ```
 
 Exemples d'utilisation (curl)
@@ -78,9 +56,6 @@ Tests
 ```bash
 # Node
 npm test
-
-# Python (pytest)
-pytest
 ```
 
 Structure recommandée (exemple)
@@ -90,8 +65,8 @@ Structure recommandée (exemple)
     /models
     /routes
     /services
-    app.js (ou main.py)
+    app.js
 .env
-package.json (ou pyproject/requirements.txt)
+package.json
 README.md
 ```

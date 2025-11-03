@@ -2,6 +2,7 @@ import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 import path from "path";
 
+// Chemin vers la base de données SQLite
 const dbPath = path.resolve(__dirname, "dev-api.db");
 
 const dbPromise = open({

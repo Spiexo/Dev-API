@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import dbPromise from "../config/config";
 
+// Bannir un utilisateur par son ID
 export const banUser = async (req: Request, res: Response) => {
   try {
     const { id: userIdToBan } = req.params;
@@ -21,6 +22,7 @@ export const banUser = async (req: Request, res: Response) => {
   }
 };
 
+// Débannir un utilisateur par son ID
 export const unbanUser = async (req: Request, res: Response) => {
   try {
     const { id: userId } = req.params;

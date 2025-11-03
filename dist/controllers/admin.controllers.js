@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unbanUser = exports.banUser = void 0;
 const config_1 = __importDefault(require("../config/config"));
+// Bannir un utilisateur par son ID
 const banUser = async (req, res) => {
     try {
         const { id: userIdToBan } = req.params;
@@ -22,6 +23,7 @@ const banUser = async (req, res) => {
     }
 };
 exports.banUser = banUser;
+// Débannir un utilisateur par son ID
 const unbanUser = async (req, res) => {
     try {
         const { id: userId } = req.params;

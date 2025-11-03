@@ -1,13 +1,14 @@
-
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
+// Définir une interface pour le payload du JWT
 interface JwtPayload {
   id: number;
   email: string;
   role: string;
 }
 
+// Middleware pour authentifier le token JWT
 export const authenticateToken = (
   req: Request,
   res: Response,
