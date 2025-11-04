@@ -23,6 +23,7 @@ const options = {
                     bearerFormat: "JWT",
                 },
             },
+            // ✅ ✅ Tous les schemas regroupés ici
             schemas: {
                 // ------------------------------
                 // 🔹 Modèles principaux
@@ -93,7 +94,10 @@ const options = {
                         first_name: { type: "string", example: "John" },
                         last_name: { type: "string", example: "Doe" },
                         bio: { type: "string", example: "Passionné de tech et de jeux." },
-                        avatar_url: { type: "string", example: "https://example.com/avatar.png" },
+                        avatar_url: {
+                            type: "string",
+                            example: "https://example.com/avatar.png",
+                        },
                     },
                 },
                 DeleteUserRequest: {
@@ -102,7 +106,7 @@ const options = {
                         confirm: {
                             type: "boolean",
                             example: true,
-                            description: "Confirmation explicite de suppression du compte",
+                            description: "Confirmation explicite",
                         },
                     },
                 },
@@ -124,16 +128,37 @@ const options = {
                     properties: {
                         note: {
                             type: "string",
-                            example: "Décision de réintégration de l'utilisateur.",
+                            example: "Décision administrative",
                         },
+                    },
+                },
+                // ------------------------------
+                // 🔹 Sports Schemas
+                // ------------------------------
+                SportsLeague: {
+                    type: "object",
+                    properties: {
+                        idLeague: { type: "string" },
+                        strLeague: { type: "string" },
+                        strSport: { type: "string" },
+                        strLeagueAlternate: { type: "string" },
+                    },
+                },
+                SportsTeam: {
+                    type: "object",
+                    properties: {
+                        idTeam: { type: "string" },
+                        strTeam: { type: "string" },
+                        strLeague: { type: "string" },
+                        strCountry: { type: "string" },
+                        strStadium: { type: "string" },
+                        strBadge: { type: "string" },
                     },
                 },
             },
         },
         security: [{ bearerAuth: [] }],
     },
-    apis: [
-        path_1.default.resolve(__dirname, "../routes/*.js"),
-    ],
+    apis: [path_1.default.resolve(__dirname, "../routes/*.js")],
 };
 exports.swaggerSpec = (0, swagger_jsdoc_1.default)(options);
