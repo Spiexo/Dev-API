@@ -3,7 +3,6 @@ import dbPromise from "../config/config";
 import { User } from "../models/user.models";
 import bcrypt from "bcrypt";
 
-// Récupérer le profil de l'utilisateur connecté
 export const getMyProfil = async (req: any, res: Response) => {
   try {
     const { id } = req.user;
@@ -32,8 +31,7 @@ export const getMyProfil = async (req: any, res: Response) => {
   }
 };
 
-// Récupérer le profil d'un utilisateur par son ID
-export const getUserProfil = async (req: Request, res: Response) => {
+export const getUserProfilByID = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const db = await dbPromise;
@@ -60,7 +58,6 @@ export const getUserProfil = async (req: Request, res: Response) => {
   }
 };
 
-// Récupérer tous les utilisateurs avec pagination
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const db = await dbPromise;
@@ -70,13 +67,11 @@ export const getAllUsers = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 5;
     const offset = (page - 1) * limit;
 
-    // Récupération des utilisateurs avec pagination
     const users = await db.all<User[]>(
       "SELECT id, username, email FROM users LIMIT ? OFFSET ?",
       [limit, offset]
     );
 
-    // Récupération du nombre total d'utilisateurs
     const totalResult = await db.get<{ count: number }>("SELECT COUNT(*) as count FROM users");
     const total = totalResult?.count || 0;
 
@@ -93,7 +88,6 @@ export const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-// Éditer le profil de l'utilisateur connecté
 export const editProfil = async (req: any, res: Response) => {
   try {
     const { id } = req.user;
@@ -146,7 +140,6 @@ export const editProfil = async (req: any, res: Response) => {
   }
 };
 
-// Supprimer le compte de l'utilisateur connecté
 export const deleteUser = async (req: any, res: Response) => {
   try {
     const { id } = req.user;

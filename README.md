@@ -31,16 +31,17 @@ NODE_ENV=development
 JWT_SECRET=jwt_secret_key
 JWT_REFRESH_SECRET=refresh_jwt_secret_key
 ```
-Le fichier SQLite dev-api.db sera créé automatiquement si absent.
+4. Le fichier SQLite dev-api.db sera créé automatiquement sinon c'est à creer dans src/config/
 
 ## Lancer le projet
 ```
-npm run dev
+npx tsc
+npm start
+
 ```
 ou
 ```
-npx tsc
-npm start
+npm run dev
 ```
 
 Le serveur tourne par défaut sur http://localhost:3000.
@@ -67,6 +68,8 @@ GET /user/profil : Obtenir son profil
 
 GET /user/profil/:id : Profil d’un utilisateur
 
+GET /user/users: Récupère tous les utilisateurs avec pagination
+
 PUT /user : Modifier son profil
 
 DELETE /user : Supprimer son compte
@@ -77,15 +80,17 @@ POST /admin/ban/:id : Bannir un utilisateur
 
 POST /admin/unban/:id : Débannir un utilisateur
 
+4. Sports
+
+POST /sports/leagues : Récupère toutes les ligues
+
+POST /sports/leagues/:id : Récupère une ligue par ID
+
+POST /sports/teams/:leagues : Récupère les équipes d'une ligue
+
 ## Tests
 Tests unitaires avec Jest :
 
 ```
-npm test
+npx jest --coverage
 ```
-## Variables d’environnement
-JWT_SECRET : clé pour signer les access tokens (doit être sécurisée)
-
-JWT_REFRESH_SECRET : clé pour signer les refresh tokens (doit être sécurisée)
-
-PORT : port du serveur

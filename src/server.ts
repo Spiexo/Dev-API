@@ -8,28 +8,20 @@ import swaggerUi from 'swagger-ui-express';
 import sportsRoutes from "./routes/sports.routes";
 import { swaggerSpec } from './docs/swagger';
 
-// Charger les variables d'environnement
 dotenv.config();
 
-// Initialiser l'application Express
 const app = express();
 
-// Middleware CORS
 app.use(cors());
-
-// Middleware pour parser le JSON
 app.use(express.json());
 
-// Routes
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/sports", sportsRoutes);
 
-// Documentation Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Démarrer le serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
   console.log(`🚀 Server running on http://localhost:${PORT}`)

@@ -50,7 +50,7 @@ router.get("/profil", auth_middlewares_1.authenticateToken, user_controllers_1.g
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-router.get("/profil/:id", auth_middlewares_1.authenticateToken, user_controllers_1.getUserProfil);
+router.get("/profil/:id", auth_middlewares_1.authenticateToken, user_controllers_1.getUserProfilByID);
 /**
  * @swagger
  * /user/users:

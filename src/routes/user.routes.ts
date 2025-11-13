@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticateToken } from "../middlewares/auth.middlewares";
-import { editProfil, getMyProfil, getUserProfil, deleteUser, getAllUsers } from "../controllers/user.controllers";
+import { editProfil, getMyProfil, getUserProfilByID, deleteUser, getAllUsers } from "../controllers/user.controllers";
 
 const router = Router();
 
@@ -52,7 +52,7 @@ router.get("/profil", authenticateToken, getMyProfil);
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
-router.get("/profil/:id", authenticateToken, getUserProfil);
+router.get("/profil/:id", authenticateToken, getUserProfilByID);
 
 /**
  * @swagger

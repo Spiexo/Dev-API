@@ -1,7 +1,6 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import path from "path";
 
-// Configuration de Swagger
 const options: swaggerJsdoc.Options = {
   definition: {
     openapi: "3.0.0",

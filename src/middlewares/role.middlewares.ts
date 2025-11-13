@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import dbPromise from "../config/config";
-// Définir un type RequestWithUser pour inclure les informations utilisateur
+
 type RequestWithUser = Request & {
   user?: {
     id: any;
@@ -8,7 +8,6 @@ type RequestWithUser = Request & {
   };
 };
 
-// Middleware pour vérifier le rôle de l'utilisateur
 export const requireRole = (roleAsked: string) => {
   return async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {

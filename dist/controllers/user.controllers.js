@@ -3,10 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.editProfil = exports.getAllUsers = exports.getUserProfil = exports.getMyProfil = void 0;
+exports.deleteUser = exports.editProfil = exports.getAllUsers = exports.getUserProfilByID = exports.getMyProfil = void 0;
 const config_1 = __importDefault(require("../config/config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-// Récupérer le profil de l'utilisateur connecté
 const getMyProfil = async (req, res) => {
     try {
         const { id } = req.user;
@@ -33,8 +32,7 @@ const getMyProfil = async (req, res) => {
     }
 };
 exports.getMyProfil = getMyProfil;
-// Récupérer le profil d'un utilisateur par son ID
-const getUserProfil = async (req, res) => {
+const getUserProfilByID = async (req, res) => {
     try {
         const { id } = req.params;
         const db = await config_1.default;
@@ -58,8 +56,7 @@ const getUserProfil = async (req, res) => {
         res.status(500).json({ error: "Erreur serveur" });
     }
 };
-exports.getUserProfil = getUserProfil;
-// Récupérer tous les utilisateurs avec pagination
+exports.getUserProfilByID = getUserProfilByID;
 const getAllUsers = async (req, res) => {
     try {
         const db = await config_1.default;
@@ -67,9 +64,7 @@ const getAllUsers = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 5;
         const offset = (page - 1) * limit;
-        // Récupération des utilisateurs avec pagination
         const users = await db.all("SELECT id, username, email FROM users LIMIT ? OFFSET ?", [limit, offset]);
-        // Récupération du nombre total d'utilisateurs
         const totalResult = await db.get("SELECT COUNT(*) as count FROM users");
         const total = totalResult?.count || 0;
         res.status(200).json({
@@ -86,7 +81,6 @@ const getAllUsers = async (req, res) => {
     }
 };
 exports.getAllUsers = getAllUsers;
-// Éditer le profil de l'utilisateur connecté
 const editProfil = async (req, res) => {
     try {
         const { id } = req.user;
@@ -129,7 +123,6 @@ const editProfil = async (req, res) => {
     }
 };
 exports.editProfil = editProfil;
-// Supprimer le compte de l'utilisateur connecté
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.user;

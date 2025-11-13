@@ -8,7 +8,6 @@ interface JwtPayload {
   role: string;
 }
 
-// Middleware pour authentifier le token JWT
 export const authenticateToken = (
   req: Request,
   res: Response,
