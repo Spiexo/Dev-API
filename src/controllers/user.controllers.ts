@@ -60,6 +60,39 @@ export const getUserProfil = async (req: Request, res: Response) => {
   }
 };
 
+// Récupérer tous les utilisateurs avec pagination
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const db = await dbPromise;
+
+    // Paramètres de pagination
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 5;
+    const offset = (page - 1) * limit;
+
+    // Récupération des utilisateurs avec pagination
+    const users = await db.all<User[]>(
+      "SELECT id, username, email FROM users LIMIT ? OFFSET ?",
+      [limit, offset]
+    );
+
+    // Récupération du nombre total d'utilisateurs
+    const totalResult = await db.get<{ count: number }>("SELECT COUNT(*) as count FROM users");
+    const total = totalResult?.count || 0;
+
+    res.status(200).json({
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+      data: users,
+    });
+  } catch (error) {
+    console.error("Erreur dans getAllUsers:", error);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
 // Éditer le profil de l'utilisateur connecté
 export const editProfil = async (req: any, res: Response) => {
   try {

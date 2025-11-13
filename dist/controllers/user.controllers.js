@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.editProfil = exports.getUserProfil = exports.getMyProfil = void 0;
+exports.deleteUser = exports.editProfil = exports.getAllUsers = exports.getUserProfil = exports.getMyProfil = void 0;
 const config_1 = __importDefault(require("../config/config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 // Récupérer le profil de l'utilisateur connecté
@@ -59,6 +59,33 @@ const getUserProfil = async (req, res) => {
     }
 };
 exports.getUserProfil = getUserProfil;
+// Récupérer tous les utilisateurs avec pagination
+const getAllUsers = async (req, res) => {
+    try {
+        const db = await config_1.default;
+        // Paramètres de pagination
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+        const offset = (page - 1) * limit;
+        // Récupération des utilisateurs avec pagination
+        const users = await db.all("SELECT id, username, email FROM users LIMIT ? OFFSET ?", [limit, offset]);
+        // Récupération du nombre total d'utilisateurs
+        const totalResult = await db.get("SELECT COUNT(*) as count FROM users");
+        const total = totalResult?.count || 0;
+        res.status(200).json({
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+            data: users,
+        });
+    }
+    catch (error) {
+        console.error("Erreur dans getAllUsers:", error);
+        res.status(500).json({ error: "Erreur serveur" });
+    }
+};
+exports.getAllUsers = getAllUsers;
 // Éditer le profil de l'utilisateur connecté
 const editProfil = async (req, res) => {
     try {

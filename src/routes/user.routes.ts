@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticateToken } from "../middlewares/auth.middlewares";
-import { editProfil, getMyProfil, getUserProfil, deleteUser } from "../controllers/user.controllers";
+import { editProfil, getMyProfil, getUserProfil, deleteUser, getAllUsers } from "../controllers/user.controllers";
 
 const router = Router();
 
@@ -53,6 +53,35 @@ router.get("/profil", authenticateToken, getMyProfil);
  *               $ref: '#/components/schemas/User'
  */
 router.get("/profil/:id", authenticateToken, getUserProfil);
+
+/**
+ * @swagger
+ * /user/users:
+ *   get:
+ *     summary: Récupère tous les utilisateurs avec pagination
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Numéro de la page
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Nombre d'utilisateurs par page
+ *     responses:
+ *       200:
+ *         description: Liste paginée des utilisateurs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetAllUsersRequest'
+ */
+router.get("/users", authenticateToken, getAllUsers);
 
 /**
  * @swagger

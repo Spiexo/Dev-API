@@ -19,8 +19,6 @@ const options: swaggerJsdoc.Options = {
           bearerFormat: "JWT",
         },
       },
-
-      // ✅ ✅ Tous les schemas regroupés ici
       schemas: {
         // ------------------------------
         // 🔹 Modèles principaux
@@ -92,7 +90,7 @@ const options: swaggerJsdoc.Options = {
         EditProfileRequest: {
           type: "object",
           properties: {
-            username: { type: "string", example: "NewUsername" },
+            username: { type: "string", example: "John Doe" },
             first_name: { type: "string", example: "John" },
             last_name: { type: "string", example: "Doe" },
             bio: { type: "string", example: "Passionné de tech et de jeux." },
@@ -111,6 +109,17 @@ const options: swaggerJsdoc.Options = {
               example: true,
               description: "Confirmation explicite",
             },
+          },
+        },
+
+        GetAllUsersRequest: {
+          type: "object",
+          properties: {
+            id: { type: "integer", example: "2" },
+            username: { type: "string", example: "Username" },
+            email: { type: "string", example: "username@exemple.com" },
+            is_banned: { type: "boolean", example: "0" },
+            role: { type: "string", enum: ["user", "admin"] , example: "user"},
           },
         },
 

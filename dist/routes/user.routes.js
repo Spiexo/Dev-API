@@ -53,6 +53,34 @@ router.get("/profil", auth_middlewares_1.authenticateToken, user_controllers_1.g
 router.get("/profil/:id", auth_middlewares_1.authenticateToken, user_controllers_1.getUserProfil);
 /**
  * @swagger
+ * /user/users:
+ *   get:
+ *     summary: Récupère tous les utilisateurs avec pagination
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Numéro de la page
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Nombre d'utilisateurs par page
+ *     responses:
+ *       200:
+ *         description: Liste paginée des utilisateurs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetAllUsersRequest'
+ */
+router.get("/users", auth_middlewares_1.authenticateToken, user_controllers_1.getAllUsers);
+/**
+ * @swagger
  * /user:
  *   put:
  *     summary: Modifier son profil

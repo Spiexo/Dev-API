@@ -23,7 +23,6 @@ const options = {
                     bearerFormat: "JWT",
                 },
             },
-            // ✅ ✅ Tous les schemas regroupés ici
             schemas: {
                 // ------------------------------
                 // 🔹 Modèles principaux
@@ -90,7 +89,7 @@ const options = {
                 EditProfileRequest: {
                     type: "object",
                     properties: {
-                        username: { type: "string", example: "NewUsername" },
+                        username: { type: "string", example: "John Doe" },
                         first_name: { type: "string", example: "John" },
                         last_name: { type: "string", example: "Doe" },
                         bio: { type: "string", example: "Passionné de tech et de jeux." },
@@ -108,6 +107,16 @@ const options = {
                             example: true,
                             description: "Confirmation explicite",
                         },
+                    },
+                },
+                GetAllUsersRequest: {
+                    type: "object",
+                    properties: {
+                        id: { type: "integer", example: "1" },
+                        username: { type: "string", example: "Username" },
+                        email: { type: "string", example: "username@exemple.com" },
+                        is_banned: { type: "boolean", example: "1 or 0" },
+                        role: { type: "string", enum: ["user", "admin"], example: "user" },
                     },
                 },
                 // ------------------------------
