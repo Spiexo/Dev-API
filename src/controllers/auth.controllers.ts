@@ -103,7 +103,7 @@ export const login = async (req: Request, res: Response) => {
     if (!match)
       return res.status(401).json({ error: "Identifiants incorrects" });
 
-    // Générer les tokens
+    // Générer le token d'accès
     const accessToken = jwt.sign(
       { id: user.id, mail: user.email },
       process.env.JWT_SECRET!,
@@ -117,7 +117,7 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: "7d" }
     );
 
-    // Stocker le refresh token en base
+    // Stocker le refresh token dans la bdd
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 j
     await db.run(
       "INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, ?)",

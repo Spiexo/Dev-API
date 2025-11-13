@@ -102,7 +102,7 @@ export const editProfil = async (req: any, res: Response) => {
     }
 
     const db = await dbPromise;
-    const allowedFields = ["username", "first_name", "last_name", "bio", "avatar_url"];
+    const allowedFields = ["username", "first_name", "last_name", "bio"];
 
     const updates = Object.entries(req.body)
       .filter(([key, value]) => allowedFields.includes(key) && value !== undefined);
@@ -138,7 +138,6 @@ export const editProfil = async (req: any, res: Response) => {
         firstName: updatedUser.first_name,
         lastName: updatedUser.last_name,
         bio: updatedUser.bio,
-        avatar_url: updatedUser.avatar_url,
       },
     });
   } catch (error) {

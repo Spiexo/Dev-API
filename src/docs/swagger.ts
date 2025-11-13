@@ -94,21 +94,6 @@ const options: swaggerJsdoc.Options = {
             first_name: { type: "string", example: "John" },
             last_name: { type: "string", example: "Doe" },
             bio: { type: "string", example: "Passionné de tech et de jeux." },
-            avatar_url: {
-              type: "string",
-              example: "https://example.com/avatar.png",
-            },
-          },
-        },
-
-        DeleteUserRequest: {
-          type: "object",
-          properties: {
-            confirm: {
-              type: "boolean",
-              example: true,
-              description: "Confirmation explicite",
-            },
           },
         },
 
@@ -120,6 +105,15 @@ const options: swaggerJsdoc.Options = {
             email: { type: "string", example: "username@exemple.com" },
             is_banned: { type: "boolean", example: "0" },
             role: { type: "string", enum: ["user", "admin"] , example: "user"},
+          },
+        },
+
+        DeleteUserRequest: {
+          type: "object",
+          properties: {
+            username: { type: "string", example: "myusername" },
+            email: { type: "string", example: "test@example.com" },
+            password: { type: "string", example: "mypassword" },
           },
         },
 
