@@ -11,7 +11,7 @@ const options = {
     definition: {
         openapi: "3.0.0",
         info: {
-            title: "API Tech & Game",
+            title: "API",
             version: "1.0.0",
             description: "API pour la gestion des utilisateurs, l'authentification et les fonctionnalités administratives.",
         },
@@ -25,7 +25,7 @@ const options = {
             },
             schemas: {
                 // ------------------------------
-                // 🔹 Modèles principaux
+                //  Modèle principal
                 // ------------------------------
                 User: {
                     type: "object",
@@ -44,11 +44,10 @@ const options = {
                     },
                 },
                 // ------------------------------
-                // 🔹 Auth Schemas
+                //  Auth Schemas
                 // ------------------------------
                 RegisterRequest: {
                     type: "object",
-                    required: ["username", "email", "password"],
                     properties: {
                         username: { type: "string", example: "myusername" },
                         email: { type: "string", example: "test@example.com" },
@@ -57,7 +56,6 @@ const options = {
                 },
                 LoginRequest: {
                     type: "object",
-                    required: ["email", "password"],
                     properties: {
                         email: { type: "string", example: "test@example.com" },
                         password: { type: "string", example: "mypassword" },
@@ -65,17 +63,13 @@ const options = {
                 },
                 LogoutRequest: {
                     type: "object",
-                    required: ["refreshToken"],
                     properties: {
-                        refreshToken: {
-                            type: "string",
-                            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                        },
+                        email: { type: "string", example: "test@example.com" },
+                        password: { type: "string", example: "mypassword" },
                     },
                 },
                 RefreshRequest: {
                     type: "object",
-                    required: ["refreshToken"],
                     properties: {
                         refreshToken: {
                             type: "string",
@@ -84,7 +78,7 @@ const options = {
                     },
                 },
                 // ------------------------------
-                // 🔹 User Schemas
+                //  User Schemas
                 // ------------------------------
                 EditProfileRequest: {
                     type: "object",
@@ -93,56 +87,28 @@ const options = {
                         first_name: { type: "string", example: "John" },
                         last_name: { type: "string", example: "Doe" },
                         bio: { type: "string", example: "Passionné de tech et de jeux." },
-                        avatar_url: {
-                            type: "string",
-                            example: "https://example.com/avatar.png",
-                        },
-                    },
-                },
-                DeleteUserRequest: {
-                    type: "object",
-                    properties: {
-                        confirm: {
-                            type: "boolean",
-                            example: true,
-                            description: "Confirmation explicite",
-                        },
                     },
                 },
                 GetAllUsersRequest: {
                     type: "object",
                     properties: {
-                        id: { type: "integer", example: "1" },
+                        id: { type: "integer", example: "2" },
                         username: { type: "string", example: "Username" },
                         email: { type: "string", example: "username@exemple.com" },
-                        is_banned: { type: "boolean", example: "1 or 0" },
+                        is_banned: { type: "boolean", example: "0" },
                         role: { type: "string", enum: ["user", "admin"], example: "user" },
                     },
                 },
-                // ------------------------------
-                // 🔹 Admin Schemas
-                // ------------------------------
-                BanUserRequest: {
-                    type: "object",
-                    required: ["reason"],
-                    properties: {
-                        reason: {
-                            type: "string",
-                            example: "Violation des conditions d'utilisation",
-                        },
-                    },
-                },
-                UnbanUserRequest: {
+                DeleteUserRequest: {
                     type: "object",
                     properties: {
-                        note: {
-                            type: "string",
-                            example: "Décision administrative",
-                        },
+                        username: { type: "string", example: "myusername" },
+                        email: { type: "string", example: "test@example.com" },
+                        password: { type: "string", example: "mypassword" },
                     },
                 },
                 // ------------------------------
-                // 🔹 Sports Schemas
+                //  Sports Schemas
                 // ------------------------------
                 SportsLeague: {
                     type: "object",

@@ -62,7 +62,6 @@ export const register = async (req: Request, res: Response) => {
     res.status(201).json({
       message: "Inscription réussie",
       accessToken,
-      refreshToken,
       user,
     });
   } catch (error: any) {
@@ -126,8 +125,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.status(200).json({
       accessToken,
-      refreshToken, // mettre refresh token en cookie httpOnly côté client idéalement
-      info: { is_premium: user.is_premium, role: user.role },
+      // refreshToken, // mettre refresh token en cookie httpOnly côté client idéalement
     });
   } catch (error) {
     console.error(error);
@@ -138,21 +136,46 @@ export const login = async (req: Request, res: Response) => {
 // Déconnexion d'un utilisateur
 export const logout = async (req: Request, res: Response) => {
   try {
-    const { refreshToken } = req.body;
+    const { email, password } = req.body;
     const db = await dbPromise;
 
-    // Supprimer le refresh token de la base
-    if (!refreshToken)
-      return res.status(400).json({ error: "Aucun refresh token fourni" });
+    // Vérification des champs obligatoires
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email et mot de passe requis" });
+    }
 
-    await db.run("DELETE FROM refresh_tokens WHERE token = ?", [refreshToken]);
+    // Vérification de l'utilisateur
+    const user = await db.get<{ id: number; password: string }>(
+      "SELECT id, password FROM users WHERE email = ?",
+      [email]
+    );
 
-    res.status(200).json({ message: "Déconnexion réussie" });
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur introuvable" });
+    }
+
+    // Vérification du mot de passe
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Mot de passe incorrect" });
+    }
+
+    // Suppression de tous les refresh tokens associés à cet utilisateur
+    const result = await db.run("DELETE FROM refresh_tokens WHERE user_id = ?", [user.id]);
+
+    if (result.changes === 0) {
+      return res.status(200).json({
+        message: "Déconnexion réussie (aucun token actif trouvé).",
+      });
+    }
+
+    res.status(200).json({ message: "Déconnexion réussie — tous les tokens ont été supprimés." });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erreur lors de la déconnexion" });
+    console.error("Erreur lors du logout :", error);
+    res.status(500).json({ error: "Erreur interne du serveur" });
   }
 };
+
 
 // Rafraîchir le token d'accès
 export const refreshToken = async (req: Request, res: Response) => {

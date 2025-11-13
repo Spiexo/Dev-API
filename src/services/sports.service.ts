@@ -1,3 +1,6 @@
+// ajouter gestion erreur
+
+
 import axios from "axios";
 
 // "3" = token public gratuit / pas besoin de clé
@@ -7,7 +10,6 @@ export async function getLeagues() {
   const res = await axios.get(`${BASE_URL}/all_leagues.php`);
   return res.data;
 }
-
 export async function getLeague(leagueId: string) {
   const res = await axios.get(`${BASE_URL}/lookupleague.php?id=${leagueId}`);
   return res.data;

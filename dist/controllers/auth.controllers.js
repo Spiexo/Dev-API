@@ -42,7 +42,6 @@ const register = async (req, res) => {
         res.status(201).json({
             message: "Inscription réussie",
             accessToken,
-            refreshToken,
             user,
         });
     }
@@ -77,17 +76,16 @@ const login = async (req, res) => {
         const match = await bcrypt_1.default.compare(password, user.password);
         if (!match)
             return res.status(401).json({ error: "Identifiants incorrects" });
-        // Générer les tokens
+        // Générer le token d'accès
         const accessToken = jsonwebtoken_1.default.sign({ id: user.id, mail: user.email }, process.env.JWT_SECRET, { expiresIn: "15m" });
         // Générer le refresh token
         const refreshToken = jsonwebtoken_1.default.sign({ id: user.id, mail: user.email }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
-        // Stocker le refresh token en base
+        // Stocker le refresh token dans la bdd
         const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 j
         await db.run("INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, ?)", [user.id, refreshToken, expiresAt.toISOString()]);
         res.status(200).json({
             accessToken,
-            refreshToken, // mettre refresh token en cookie httpOnly côté client idéalement
-            info: { is_premium: user.is_premium, role: user.role },
+            // refreshToken, // mettre refresh token en cookie httpOnly côté client idéalement
         });
     }
     catch (error) {
@@ -99,17 +97,34 @@ exports.login = login;
 // Déconnexion d'un utilisateur
 const logout = async (req, res) => {
     try {
-        const { refreshToken } = req.body;
+        const { email, password } = req.body;
         const db = await config_1.default;
-        // Supprimer le refresh token de la base
-        if (!refreshToken)
-            return res.status(400).json({ error: "Aucun refresh token fourni" });
-        await db.run("DELETE FROM refresh_tokens WHERE token = ?", [refreshToken]);
-        res.status(200).json({ message: "Déconnexion réussie" });
+        // Vérification des champs obligatoires
+        if (!email || !password) {
+            return res.status(400).json({ error: "Email et mot de passe requis" });
+        }
+        // Vérification de l'utilisateur
+        const user = await db.get("SELECT id, password FROM users WHERE email = ?", [email]);
+        if (!user) {
+            return res.status(404).json({ error: "Utilisateur introuvable" });
+        }
+        // Vérification du mot de passe
+        const isPasswordValid = await bcrypt_1.default.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: "Mot de passe incorrect" });
+        }
+        // Suppression de tous les refresh tokens associés à cet utilisateur
+        const result = await db.run("DELETE FROM refresh_tokens WHERE user_id = ?", [user.id]);
+        if (result.changes === 0) {
+            return res.status(200).json({
+                message: "Déconnexion réussie (aucun token actif trouvé).",
+            });
+        }
+        res.status(200).json({ message: "Déconnexion réussie — tous les tokens ont été supprimés." });
     }
     catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Erreur lors de la déconnexion" });
+        console.error("Erreur lors du logout :", error);
+        res.status(500).json({ error: "Erreur interne du serveur" });
     }
 };
 exports.logout = logout;

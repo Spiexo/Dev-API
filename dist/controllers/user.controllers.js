@@ -94,7 +94,7 @@ const editProfil = async (req, res) => {
             return res.status(401).json({ error: "Utilisateur non authentifié" });
         }
         const db = await config_1.default;
-        const allowedFields = ["username", "first_name", "last_name", "bio", "avatar_url"];
+        const allowedFields = ["username", "first_name", "last_name", "bio"];
         const updates = Object.entries(req.body)
             .filter(([key, value]) => allowedFields.includes(key) && value !== undefined);
         if (updates.length === 0) {
@@ -120,7 +120,6 @@ const editProfil = async (req, res) => {
                 firstName: updatedUser.first_name,
                 lastName: updatedUser.last_name,
                 bio: updatedUser.bio,
-                avatar_url: updatedUser.avatar_url,
             },
         });
     }

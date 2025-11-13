@@ -6,7 +6,7 @@ const options: swaggerJsdoc.Options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "API Tech & Game",
+      title: "API",
       version: "1.0.0",
       description:
         "API pour la gestion des utilisateurs, l'authentification et les fonctionnalités administratives.",
@@ -21,7 +21,7 @@ const options: swaggerJsdoc.Options = {
       },
       schemas: {
         // ------------------------------
-        // 🔹 Modèles principaux
+        //  Modèle principal
         // ------------------------------
         User: {
           type: "object",
@@ -41,11 +41,10 @@ const options: swaggerJsdoc.Options = {
         },
 
         // ------------------------------
-        // 🔹 Auth Schemas
+        //  Auth Schemas
         // ------------------------------
         RegisterRequest: {
           type: "object",
-          required: ["username", "email", "password"],
           properties: {
             username: { type: "string", example: "myusername" },
             email: { type: "string", example: "test@example.com" },
@@ -55,7 +54,6 @@ const options: swaggerJsdoc.Options = {
 
         LoginRequest: {
           type: "object",
-          required: ["email", "password"],
           properties: {
             email: { type: "string", example: "test@example.com" },
             password: { type: "string", example: "mypassword" },
@@ -64,18 +62,14 @@ const options: swaggerJsdoc.Options = {
 
         LogoutRequest: {
           type: "object",
-          required: ["refreshToken"],
           properties: {
-            refreshToken: {
-              type: "string",
-              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-            },
+            email: { type: "string", example: "test@example.com" },
+            password: { type: "string", example: "mypassword" },
           },
         },
 
         RefreshRequest: {
           type: "object",
-          required: ["refreshToken"],
           properties: {
             refreshToken: {
               type: "string",
@@ -85,7 +79,7 @@ const options: swaggerJsdoc.Options = {
         },
 
         // ------------------------------
-        // 🔹 User Schemas
+        //  User Schemas
         // ------------------------------
         EditProfileRequest: {
           type: "object",
@@ -118,31 +112,7 @@ const options: swaggerJsdoc.Options = {
         },
 
         // ------------------------------
-        // 🔹 Admin Schemas
-        // ------------------------------
-        BanUserRequest: {
-          type: "object",
-          required: ["reason"],
-          properties: {
-            reason: {
-              type: "string",
-              example: "Violation des conditions d'utilisation",
-            },
-          },
-        },
-
-        UnbanUserRequest: {
-          type: "object",
-          properties: {
-            note: {
-              type: "string",
-              example: "Décision administrative",
-            },
-          },
-        },
-
-        // ------------------------------
-        // 🔹 Sports Schemas
+        //  Sports Schemas
         // ------------------------------
         SportsLeague: {
           type: "object",
