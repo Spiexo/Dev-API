@@ -1,72 +1,91 @@
-# fil-rouge — API
+# Fil-Rouge Developpement API
 
-Description
-- API backend pour le projet "fil-rouge". Fournit les endpoints REST pour la gestion des ressources (auth, users, items, etc.). README synthétique pour installation, configuration et lancement.
+API REST pour la gestion des utilisateurs, de l'authentification, des fonctionnalités administratives et l'intégration de l'API TheSportsDB.
 
-Prérequis
-- Git
-- Node.js >= 16 (ou Python 3.8+) selon l'implémentation du projet
-- npm ou yarn (si Node.js)
-- Docker (optionnel)
-- Une base de données (Postgres, MySQL, MongoDB) si nécessaire
+## Fonctionnalités
 
-Installation (depuis le dépôt local)
-1. Ouvrir un terminal à la racine du projet.
-2. Installer les dépendances (exemple Node.js) :
-```bash
-# avec npm
-npm install
+- Authentification : inscription, connexion, déconnexion, rafraîchissement de token
+- Gestion des utilisateurs : profil, édition, suppression
+- Gestion administrative : bannir/débannir des utilisateurs
+- Tests unitaires avec Jest
+- Documentation Swagger
 
-# ou avec yarn
-yarn
+## Installation
+
+1. Cloner le dépôt :
+
+```
+git clone https://github.com/Spiexo/Dev-API
 ```
 
-Configuration
-- Créer un fichier `.env` à la racine en se basant sur `.env.example` . Exemple minimal :
+2. Installer les dépendances :
+
+```
+npm install
+```
+3. Créer un fichier .env avec les variables suivantes :
+
 ```
 PORT=3000
-JWT_SECRET=changeme
 NODE_ENV=development
+JWT_SECRET=jwt_secret_key
+JWT_REFRESH_SECRET=refresh_jwt_secret_key
 ```
-- Remplacer les valeurs par celles de l'environnement local.
+Le fichier SQLite dev-api.db sera créé automatiquement si absent.
 
-Lancer le projet
-
-Node.js (développement)
-```bash
-# démarrer en mode développement (avec reload si nodemon présent)
+## Lancer le projet
+```
 npm run dev
-
-# ou
+```
+ou
+```
 npx tsc
-npm run start
+npm start
 ```
 
-Exemples d'utilisation (curl)
-```bash
-# vérifier que le serveur répond
-curl http://localhost:3000/health
+Le serveur tourne par défaut sur http://localhost:3000.
 
-# requête POST de connexion (exemple)
-curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d '{"email":"exemple@test.com","password":"pwd"}'
+Documentation Swagger
+Accessible sur : http://localhost:3000/api-docs
+
+Swagger fournit la description complète de toutes les routes, des paramètres et des modèles (User, RegisterRequest, LoginRequest, etc.).
+
+## Routes principales
+1. Auth
+
+POST /auth/register : Inscription
+
+POST /auth/login : Connexion
+
+POST /auth/logout : Déconnexion
+
+POST /auth/refresh : Rafraîchir le token
+
+2. Users
+
+GET /user/profil : Obtenir son profil
+
+GET /user/profil/:id : Profil d’un utilisateur
+
+PUT /user : Modifier son profil
+
+DELETE /user : Supprimer son compte
+
+3. Admin
+
+POST /admin/ban/:id : Bannir un utilisateur
+
+POST /admin/unban/:id : Débannir un utilisateur
+
+## Tests
+Tests unitaires avec Jest :
+
 ```
-
-Tests
-- Lancer la suite de tests (si présente) :
-```bash
-# Node
 npm test
 ```
+## Variables d’environnement
+JWT_SECRET : clé pour signer les access tokens (doit être sécurisée)
 
-Structure recommandée (exemple)
-```
-/src
-    /controllers
-    /models
-    /routes
-    /services
-    app.js
-.env
-package.json
-README.md
-```
+JWT_REFRESH_SECRET : clé pour signer les refresh tokens (doit être sécurisée)
+
+PORT : port du serveur

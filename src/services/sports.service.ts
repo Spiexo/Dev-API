@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "https://www.thesportsdb.com/api/v1/json/3"; 
 // "3" = token public gratuit / pas besoin de clé
+const BASE_URL = "https://www.thesportsdb.com/api/v1/json/3"; 
 
 export async function getLeagues() {
   const res = await axios.get(`${BASE_URL}/all_leagues.php`);
