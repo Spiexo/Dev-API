@@ -31,8 +31,6 @@ const router = (0, express_1.Router)();
  *               properties:
  *                 accessToken:
  *                   type: string
- *                 refreshToken:
- *                   type: string
  *                 user:
  *                   $ref: '#/components/schemas/User'
  *       400:
@@ -62,8 +60,6 @@ router.post("/register", auth_controllers_1.register);
  *               type: object
  *               properties:
  *                 accessToken:
- *                   type: string
- *                 refreshToken:
  *                   type: string
  *       401:
  *         description: Identifiants invalides

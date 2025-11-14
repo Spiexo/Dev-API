@@ -32,8 +32,6 @@ const router = Router();
  *               properties:
  *                 accessToken:
  *                   type: string
- *                 refreshToken:
- *                   type: string
  *                 user:
  *                   $ref: '#/components/schemas/User'
  *       400:
@@ -64,8 +62,6 @@ router.post("/register", register);
  *               type: object
  *               properties:
  *                 accessToken:
- *                   type: string
- *                 refreshToken:
  *                   type: string
  *       401:
  *         description: Identifiants invalides

@@ -5,9 +5,13 @@ export const banUser = async (req: Request, res: Response) => {
   try {
     const { id: userIdToBan } = req.params;
     const db = await dbPromise;
- 
-    const target = await db.get("SELECT id FROM users WHERE id = ?", [userIdToBan]);
+
+    const target = await db.get("SELECT id, is_banned FROM users WHERE id = ?", [userIdToBan]);
     if (!target) return res.status(404).json({ error: "Utilisateur introuvable" });
+
+    if (target.is_banned) {
+      return res.status(400).json({ error: "L'utilisateur est déjà banni" });
+    }
 
     await db.run("UPDATE users SET is_banned = 1 WHERE id = ?", [userIdToBan]);
 
@@ -25,8 +29,12 @@ export const unbanUser = async (req: Request, res: Response) => {
     const { id: userId } = req.params;
     const db = await dbPromise;
 
-    const target = await db.get("SELECT id FROM users WHERE id = ?", [userId]);
+    const target = await db.get("SELECT id, is_banned FROM users WHERE id = ?", [userId]);
     if (!target) return res.status(404).json({ error: "Utilisateur introuvable" });
+
+    if (!target.is_banned) {
+      return res.status(400).json({ error: "L'utilisateur n'est pas banni" });
+    }
 
     await db.run("UPDATE users SET is_banned = 0 WHERE id = ?", [userId]);
 

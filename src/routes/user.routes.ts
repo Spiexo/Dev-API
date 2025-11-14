@@ -71,7 +71,7 @@ router.get("/profil/:id", authenticateToken, getUserProfilByID);
  *         name: limit
  *         schema:
  *           type: integer
- *           default: 10
+ *           default: 3
  *         description: Nombre d'utilisateurs par page
  *     responses:
  *       200:

@@ -3,8 +3,6 @@ import app from "../app";
 import db from "../__mocks__/config";
 
 
-jest.mock('../config/config');
-
 jest.mock("../middlewares/auth.middlewares", () => ({
   authenticateToken: (req: any, res: any, next: any) => {
     req.user = { id: 1 };
