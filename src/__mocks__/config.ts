@@ -1,7 +1,10 @@
-export const query = jest.fn();
+// __mocks__/config.ts
+export const get = jest.fn();
+export const all = jest.fn();
 export const run = jest.fn();
 
 export default {
-  query,
-  run
+  get,
+  all,
+  run,
 };
