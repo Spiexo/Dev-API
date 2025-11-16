@@ -14,7 +14,7 @@ const router = (0, express_1.Router)();
 /**
  * @swagger
  * /admin/ban/{id}:
- *   post:
+ *   put:
  *     summary: Bannir un utilisateur
  *     tags: [Admin]
  *     security:
@@ -32,11 +32,11 @@ const router = (0, express_1.Router)();
  *       403:
  *         description: Accès refusé (non administrateur)
  */
-router.post("/ban/:id", auth_middlewares_1.authenticateToken, (0, role_middlewares_1.requireRole)("admin"), admin_controllers_1.banUser);
+router.put("/ban/:id", auth_middlewares_1.authenticateToken, (0, role_middlewares_1.requireRole)("admin"), admin_controllers_1.banUser);
 /**
  * @swagger
  * /admin/unban/{id}:
- *   post:
+ *   put:
  *     summary: Débannir un utilisateur
  *     tags: [Admin]
  *     security:
@@ -54,5 +54,5 @@ router.post("/ban/:id", auth_middlewares_1.authenticateToken, (0, role_middlewar
  *       403:
  *         description: Accès refusé (non administrateur)
  */
-router.post("/unban/:id", auth_middlewares_1.authenticateToken, (0, role_middlewares_1.requireRole)("admin"), admin_controllers_1.unbanUser);
+router.put("/unban/:id", auth_middlewares_1.authenticateToken, (0, role_middlewares_1.requireRole)("admin"), admin_controllers_1.unbanUser);
 exports.default = router;

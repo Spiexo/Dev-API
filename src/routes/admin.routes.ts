@@ -15,7 +15,7 @@ const router = Router();
 /**
  * @swagger
  * /admin/ban/{id}:
- *   post:
+ *   put:
  *     summary: Bannir un utilisateur
  *     tags: [Admin]
  *     security:
@@ -33,12 +33,12 @@ const router = Router();
  *       403:
  *         description: Accès refusé (non administrateur)
  */
-router.post("/ban/:id", authenticateToken, requireRole("admin"), banUser);
+router.put("/ban/:id", authenticateToken, requireRole("admin"), banUser);
 
 /**
  * @swagger
  * /admin/unban/{id}:
- *   post:
+ *   put:
  *     summary: Débannir un utilisateur
  *     tags: [Admin]
  *     security:
@@ -56,6 +56,6 @@ router.post("/ban/:id", authenticateToken, requireRole("admin"), banUser);
  *       403:
  *         description: Accès refusé (non administrateur)
  */
-router.post("/unban/:id", authenticateToken, requireRole("admin"), unbanUser);
+router.put("/unban/:id", authenticateToken, requireRole("admin"), unbanUser);
 
 export default router;

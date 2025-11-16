@@ -34,12 +34,12 @@ JWT_REFRESH_SECRET=refresh_jwt_secret_key
 4. Le fichier SQLite dev-api.db sera créé automatiquement sinon c'est à creer dans src/config/
 
 ## Lancer le projet
+Mode développement
 ```
 npx tsc
 npm start
-
 ```
-ou
+Mode production
 ```
 npm run dev
 ```

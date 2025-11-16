@@ -68,7 +68,7 @@ router.get("/profil/:id", auth_middlewares_1.authenticateToken, user_controllers
  *         name: limit
  *         schema:
  *           type: integer
- *           default: 10
+ *           default: 3
  *         description: Nombre d'utilisateurs par page
  *     responses:
  *       200:
